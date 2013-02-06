@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/body_background"
+        android:id="@+id/container">
+        <TextView
+            android:id="@+id/error"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@drawable/error_background"
+            android:textColor="#FFFFFF"
+            android:visibility="gone"
+        />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+            <ListView
+		android:id="@+id/dashboard_listview"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:divider="@android:color/transparent"
+		android:dividerHeight="10.0dp" />
+        </LinearLayout>
+    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/loader"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignTop="@id/container"
+        android:layout_alignBottom="@id/container"
+        android:background="#00AAAAAA">
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            android:id="@+id/loader_image" />
+    </RelativeLayout>
+</RelativeLayout>

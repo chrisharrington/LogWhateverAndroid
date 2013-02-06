@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Log Whatever</string>
+    
+	<string name="email_address_hint">Email address</string>
+	<string name="password_hint">Password</string>
+
+	<string name="sign_in_button">Sign In</string>
+	<string name="sign_in_title">SIGN IN</string>
+</resources>

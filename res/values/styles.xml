@@ -1,0 +1,6 @@
+<resources>
+	<style name="LogWhateverTheme" parent="@android:style/Theme.Holo">
+		<item name="android:textColorPrimary">#000000</item>
+		<item name="android:textCursorDrawable">@null</item>
+	</style>
+</resources>
