@@ -92,7 +92,6 @@ public class DashboardActivity extends BaseActivity {
     
     private List<Dashboard> createDashboardModels() {
 	List<Dashboard> dashboards = new ArrayList<Dashboard>();
-	
 	for (Log log : _logs) {
 	    Dashboard dashboard = new Dashboard();
 	    dashboard.Name = log.Name;
@@ -131,7 +130,11 @@ public class DashboardActivity extends BaseActivity {
 	
 	Collections.sort(_tags, new TagDateComparator());
 	List<Tag> result = new ArrayList<Tag>();
-	Date date = _tags.get(0).Date;
+	Date date = new Date(1, 1, 1);
+	for (Tag tag : _tags)
+	    if (tag.LogId.equals(log.Id) && date.before(tag.Date))
+		date = tag.Date;
+	
 	for (Tag tag : _tags)
 	    if (tag.LogId.equals(log.Id) && tag.Date.equals(date))
 		result.add(tag);
