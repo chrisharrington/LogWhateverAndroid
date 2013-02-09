@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Tag extends EventData {
+    public UUID Id;
     public UUID UserId;
     public UUID EventId;
     public String Name;

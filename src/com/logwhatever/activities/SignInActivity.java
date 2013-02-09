@@ -44,7 +44,7 @@ public class SignInActivity extends BaseActivity {
 	hideError();
 	getLogApplication().setSession(session);
 	
-	startActivity(new Intent(this, DashboardActivity.class));
+	startActivity(new Intent(this, FragmentActivity.class));
     }
     
     private String getOwnerEmailAddress() {

@@ -8,10 +8,10 @@
 					android:endColor="#2A67AD"
 					android:type="linear" />
 			<corners
-				android:bottomRightRadius="5dp"
-				android:bottomLeftRadius="5dp"
-				android:topLeftRadius="5dp"
-				android:topRightRadius="5dp"/>
+				android:bottomRightRadius="3dp"
+				android:bottomLeftRadius="3dp"
+				android:topLeftRadius="3dp"
+				android:topRightRadius="3dp"/>
 		</shape>
 	</item>
 	<item android:state_pressed="true">
@@ -22,10 +22,10 @@
 					android:endColor="#2A67AD"
 					android:type="linear" />
 			<corners
-				android:bottomRightRadius="5dp"
-				android:bottomLeftRadius="5dp"
-				android:topLeftRadius="5dp"
-				android:topRightRadius="5dp"/>
+				android:bottomRightRadius="3dp"
+				android:bottomLeftRadius="3dp"
+				android:topLeftRadius="3dp"
+				android:topRightRadius="3dp"/>
 		</shape>
 	</item>
 	<item android:state_focused="true">
@@ -36,10 +36,10 @@
 					android:endColor="#2A67AD"
 					android:type="linear" />
 			<corners
-				android:bottomRightRadius="5dp"
-				android:bottomLeftRadius="5dp"
-				android:topLeftRadius="5dp"
-				android:topRightRadius="5dp"/>
+				android:bottomRightRadius="3dp"
+				android:bottomLeftRadius="3dp"
+				android:topLeftRadius="3dp"
+				android:topRightRadius="3dp"/>
 		</shape>
 	</item>
 </selector>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/add_log_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
+    <RelativeLayout
+	    android:id="@+id/log_info"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:background="@drawable/tile_background"
+	    android:padding="10dp"
+	    android:layout_alignParentTop="true">
+	    <EditText 
+		android:id="@+id/log_name"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" 
+		android:hint="@string/log_name_hint"
+		android:layout_alignParentTop="true"
+		android:background="@drawable/input_background"
+		android:padding="10dp"
+		android:singleLine="true"
+		android:lines="1"
+		android:layout_marginBottom="10dp"
+		android:scrollHorizontally="true"/>
+	    <EditText
+		android:id="@+id/log_date"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:singleLine="true"
+		android:background="@drawable/input_background"
+		android:padding="10dp"
+		android:lines="1"
+		android:scrollHorizontally="true"
+		android:layout_below="@id/log_name"
+		android:layout_alignParentLeft="true"
+		android:layout_marginRight="5dp"
+		android:layout_toLeftOf="@+id/log_time" />
+	    <EditText
+		android:id="@+id/log_time"
+		android:layout_width="120dp"
+		android:layout_height="wrap_content"
+		android:singleLine="true"
+		android:background="@drawable/input_background"
+		android:padding="10dp"
+		android:lines="1"
+		android:scrollHorizontally="true"
+		android:layout_below="@id/log_name"
+		android:layout_marginLeft="5dp"
+		android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+	android:id="@+id/log_measurements"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@drawable/tile_background"
+	android:padding="10dp"
+	android:layout_below="@id/log_info"
+	android:layout_marginTop="10dp">
+	<Button
+	    android:id="@+id/log_add_measurement"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/log_add_measurement"
+	    android:background="@drawable/button_background"
+	    android:textColor="#FFFFFF"
+	    android:padding="10dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+	android:id="@+id/log_tags"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@drawable/tile_background"
+	android:padding="10dp"
+	android:layout_below="@id/log_measurements"
+	android:layout_marginTop="10dp">
+	<Button
+	    android:id="@+id/log_add_tag"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/log_add_tag"
+	    android:background="@drawable/button_background"
+	    android:textColor="#FFFFFF"
+	    android:padding="10dp" />
+    </RelativeLayout>
+</RelativeLayout>

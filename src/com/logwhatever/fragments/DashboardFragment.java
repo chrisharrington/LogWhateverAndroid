@@ -1,10 +1,14 @@
-package com.logwhatever.activities;
+package com.logwhatever.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.widget.ListView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
 import com.logwhatever.R;
-import com.logwhatever.adapters.DashboardAdapter;
-import com.logwhatever.models.Dashboard;
 import com.logwhatever.models.Event;
 import com.logwhatever.models.Log;
 import com.logwhatever.models.Measurement;
@@ -14,34 +18,40 @@ import com.logwhatever.repositories.ILogRepository;
 import com.logwhatever.repositories.IMeasurementRepository;
 import com.logwhatever.repositories.ITagRepository;
 import com.logwhatever.service.IExecutor;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class DashboardActivity extends BaseActivity {
-    
+public class DashboardFragment extends BaseFragment {
+
     private ILogRepository getLogRepository() { return getInjector().getInstance(ILogRepository.class); }
     private IMeasurementRepository getMeasurementRepository() { return getInjector().getInstance(IMeasurementRepository.class); }
     private ITagRepository getTagRepository() { return getInjector().getInstance(ITagRepository.class); }
     private IEventRepository getEventRepository() { return getInjector().getInstance(IEventRepository.class); }
     
+    private View _view;
     private List<Log> _logs;
     private List<Measurement> _measurements;
     private List<Tag> _tags;
     private List<Event> _events;
+    private SimpleDateFormat _format;
     
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);	
-        setContentView(R.layout.activity_dashboard);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 	setLoading(true);
+	
+	_format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        _view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 	
 	getLogs();
 	getMeasurements();
 	getEvents();
 	getTags();
+	
+	return _view;
     }
     
     private void getLogs() {
@@ -84,23 +94,28 @@ public class DashboardActivity extends BaseActivity {
 	if (_logs == null || _measurements == null || _events == null || _tags == null)
 	    return;
 	
-	ListView list = (ListView) findViewById(R.id.dashboard_listview);
-	list.setAdapter(new DashboardAdapter(this, R.layout.listview_dashboard, createDashboardModels()));
+	LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	LinearLayout layout = (LinearLayout) _view.findViewById(R.id.dashboard_container);
+	createDashboardModels(layout, inflater);
 	
 	setLoading(false);
     }
     
-    private List<Dashboard> createDashboardModels() {
-	List<Dashboard> dashboards = new ArrayList<Dashboard>();
-	for (Log log : _logs) {
-	    Dashboard dashboard = new Dashboard();
-	    dashboard.Name = log.Name;
-	    dashboard.Date = getLatestEvent().Date;
-	    dashboard.Measurements = getMeasurementsForLog(log);
-	    dashboard.Tags = getTagsForLog(log);
-	    dashboards.add(dashboard);
+    private void createDashboardModels(LinearLayout layout, LayoutInflater inflater) {
+	for (int i = 0; i < _logs.size(); i++) {
+	    Log log = _logs.get(i);
+	    LinearLayout view = (LinearLayout) inflater.inflate(R.layout.dashboard_item, null);
+	    ((TextView) view.findViewById(R.id.listview_dashboard_title)).setText(log.Name);
+	    ((TextView) view.findViewById(R.id.listview_dashboard_date)).setText(_format.format(getLatestEvent().Date));
+	    createMeasurements(view, getMeasurementsForLog(log), inflater);
+	    createTags(view, getTagsForLog(log), inflater);
+	    if (i > 0) {
+		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		params.setMargins(0, 20, 0, 0);
+		view.setLayoutParams(params);
+	    }
+	    layout.addView(view);
 	}
-	return dashboards;
     }
     
     private Event getLatestEvent() {
@@ -140,6 +155,34 @@ public class DashboardActivity extends BaseActivity {
 		result.add(tag);
 	Collections.sort(result, new TagNameComparator());
 	return result;
+    }
+    
+    private void createMeasurements(View view, List<Measurement> measurements, LayoutInflater inflater) {
+	LinearLayout measurementsLayout = (LinearLayout) view.findViewById(R.id.linear_dashboard_measurements);
+	measurementsLayout.removeAllViews();
+	
+	for (Measurement measurement : measurements) {
+	    LinearLayout measurementView = (LinearLayout) inflater.inflate(R.layout.event_data, null);
+	    ((TextView) measurementView.findViewById(R.id.event_data_title)).setText(measurement.toString());
+	    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+	    params.setMargins(0, 8, 0, 0);
+	    measurementView.setLayoutParams(params);
+	    measurementsLayout.addView(measurementView);
+	}
+    }
+    
+    private void createTags(View view, List<Tag> tags, LayoutInflater inflater) {
+	LinearLayout tagsLayout = (LinearLayout) view.findViewById(R.id.linear_dashboard_tags);
+	tagsLayout.removeAllViews();
+	
+	for (Tag tag : tags) {
+	    LinearLayout tagView = (LinearLayout) inflater.inflate(R.layout.event_data, null);
+	    ((TextView) tagView.findViewById(R.id.event_data_title)).setText(tag.toString());
+	    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+	    params.setMargins(0, 8, 0, 0);
+	    tagView.setLayoutParams(params);;
+	    tagsLayout.addView(tagView);
+	}
     }
     
     private class TagDateComparator implements Comparator<Tag> {

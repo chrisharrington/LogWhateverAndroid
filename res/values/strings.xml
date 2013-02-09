@@ -8,6 +8,16 @@
 	<string name="sign_in_button">Sign In</string>
 	<string name="sign_in_title">SIGN IN</string>
 
+	<string name="log_name_hint">Name?</string>
+	<string name="log_add_measurement">Add Measurement</string>
+	<string name="log_add_tag">Add Tag</string>
+
+	<string name="add_measurement_name_hint">Name?</string>
+	<string name="add_measurement_quantity_hint">Quantity?</string>
+	<string name="add_measurement_units_hint">Units?</string>
+	<string name="add_measurement_add">Add</string>
+	<string name="add_measurement_cancel">Cancel</string>
+
 	<string name="menu_log">Log Some Stuff</string>
 	<string name="menu_search">Search</string>
 </resources>

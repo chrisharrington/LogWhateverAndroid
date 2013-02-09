@@ -1,39 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:id="@+id/parent_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@drawable/body_background"
         android:id="@+id/container">
         <TextView
             android:id="@+id/error"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:background="@drawable/error_background"
             android:textColor="#FFFFFF"
-            android:visibility="gone"
-        />
+            android:visibility="gone" />
         <LinearLayout
+	    android:id="@+id/fragment_container"
             android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp">
-            <ListView
-		android:id="@+id/dashboard_listview"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:divider="@android:color/transparent"
-		android:dividerHeight="10.0dp" />
-        </LinearLayout>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+	</LinearLayout>
     </LinearLayout>
     <RelativeLayout
         android:id="@+id/loader"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignTop="@id/container"
         android:layout_alignBottom="@id/container"
         android:background="#00AAAAAA">
@@ -47,4 +41,22 @@
             android:visibility="gone"
             android:id="@+id/loader_image" />
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/floater"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+	android:gravity="center_horizontal"
+        android:layout_alignTop="@id/container"
+        android:layout_alignBottom="@id/container"
+        android:background="#00AAAAAA"
+	android:weightSum="1">
+	<RelativeLayout
+	    android:id="@+id/inner_floater"
+	    android:layout_width="0px"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="0.8"
+	    android:layout_marginTop="20dp"
+	    android:background="@drawable/floater_background">
+	</RelativeLayout>
+    </LinearLayout>
 </RelativeLayout>

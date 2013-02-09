@@ -1,6 +1,10 @@
 package com.logwhatever.activities;
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.opengl.Visibility;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,9 +15,10 @@ import android.widget.TextView;
 import com.google.inject.Injector;
 import com.logwhatever.R;
 import com.logwhatever.service.LogWhateverApplication;
+import com.logwhatever.fragments.DashboardFragment;
 
 public class BaseActivity extends Activity {
-
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 	MenuInflater inflater = getMenuInflater();
@@ -23,6 +28,7 @@ public class BaseActivity extends Activity {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+	
 	switch (item.getItemId()) {
 	    case R.id.menu_log:
 		return true;

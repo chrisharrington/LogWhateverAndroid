@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Measurement extends EventData {
+    public UUID Id;
     public UUID UserId;
     public UUID GroupId;
     public UUID LogId;
