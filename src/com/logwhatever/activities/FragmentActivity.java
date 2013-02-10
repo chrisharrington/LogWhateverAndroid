@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import com.logwhatever.R;
 import com.logwhatever.fragments.BaseFragment;
-import com.logwhatever.fragments.DashboardFragment;
 import com.logwhatever.fragments.LogFragment;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,18 +43,6 @@ public class FragmentActivity extends BaseActivity {
 	getFragmentManager().popBackStackImmediate();
     }
     
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);	
-        setContentView(R.layout.activity);
-	
-	_fragmentManager = getFragmentManager();
-	FragmentTransaction transaction = _fragmentManager.beginTransaction();
-	//transaction.add(R.id.fragment_container, new DashboardFragment());
-	transaction.add(R.id.fragment_container, new LogFragment());
-	transaction.commit();
-    }
-
     public void setData(String key, Object value) {
 	if (_data == null)
 	    _data = new HashMap<String, Object>();
@@ -70,6 +57,18 @@ public class FragmentActivity extends BaseActivity {
 	if (remove)
 	    _data.remove(key);
 	return data;
+    }
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);	
+        setContentView(R.layout.activity);
+	
+	_fragmentManager = getFragmentManager();
+	FragmentTransaction transaction = _fragmentManager.beginTransaction();
+	//transaction.add(R.id.fragment_container, new DashboardFragment());
+	transaction.add(R.id.fragment_container, new LogFragment());
+	transaction.commit();
     }
     
 }

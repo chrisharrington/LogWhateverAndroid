@@ -50,12 +50,13 @@
 		android:layout_alignParentRight="true" />
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
 	android:id="@+id/log_measurements"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:background="@drawable/tile_background"
 	android:padding="10dp"
+	android:orientation="vertical"
 	android:layout_below="@id/log_info"
 	android:layout_marginTop="10dp">
 	<Button
@@ -66,14 +67,15 @@
 	    android:background="@drawable/button_background"
 	    android:textColor="#FFFFFF"
 	    android:padding="10dp" />
-    </RelativeLayout>
+    </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
 	android:id="@+id/log_tags"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:background="@drawable/tile_background"
 	android:padding="10dp"
+	android:orientation="vertical"
 	android:layout_below="@id/log_measurements"
 	android:layout_marginTop="10dp">
 	<Button
@@ -84,5 +86,5 @@
 	    android:background="@drawable/button_background"
 	    android:textColor="#FFFFFF"
 	    android:padding="10dp" />
-    </RelativeLayout>
+    </LinearLayout>
 </RelativeLayout>

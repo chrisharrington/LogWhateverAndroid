@@ -1,7 +1,6 @@
 package com.logwhatever.fragments;
 
 import android.app.Fragment;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -9,10 +8,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import com.google.inject.Injector;
 import com.logwhatever.R;
+import com.logwhatever.activities.BaseActivity;
 import com.logwhatever.activities.FragmentActivity;
 import com.logwhatever.service.LogWhateverApplication;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 
 public class BaseFragment extends Fragment {
 
@@ -44,10 +43,6 @@ public class BaseFragment extends Fragment {
 	((FragmentActivity) getActivity()).returnToPreviousFragment();
     }
     
-    protected void showKeyboard() {
-	getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-    }
-    
     protected void setData(String key, Object value) {
 	((FragmentActivity) getActivity()).setData(key, value);
     }
@@ -56,12 +51,29 @@ public class BaseFragment extends Fragment {
 	return ((FragmentActivity) getActivity()).getData(key, remove);
     }
     
-    protected void loadFloater(View view) {
+    protected View loadFloater(View view) {
 	LinearLayout floater = (LinearLayout) getActivity().getWindow().getDecorView().findViewById(R.id.floater);
 	floater.setBackgroundColor(0xAAAAAAAA);
 	RelativeLayout inner = (RelativeLayout) floater.findViewById(R.id.inner_floater);
 	inner.removeAllViews();
 	inner.addView(view);
 	floater.setVisibility(View.VISIBLE);
+	return floater;
+    }
+    
+    protected void hideFloater() {
+	getActivity().getWindow().getDecorView().findViewById(R.id.floater).setVisibility(View.GONE);
+    }
+    
+    protected View getFloater() {
+	return getActivity().getWindow().getDecorView().findViewById(R.id.floater);
+    }
+    
+    protected void hideKeyboard(View view) {
+	((BaseActivity) getActivity()).hideKeyboard(view);
+    }
+    
+    protected void showKeyboard(View view) {
+	((BaseActivity) getActivity()).showKeyboard(view);
     }
 }

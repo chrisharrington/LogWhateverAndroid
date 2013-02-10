@@ -18,10 +18,10 @@ public class Measurement extends EventData {
     @Override
     public String toString() {
 	String result = "";
-	if (Name != null && Name != "")
+	if (Name != null && !Name.equals(""))
 	    result = Name + ": ";
 	result += Quantity;
-	if (Unit != null && Unit != "")
+	if (Unit != null && !Unit.equals(""))
 	    result += " " + Unit;
 	return result;
     }

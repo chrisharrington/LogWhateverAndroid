@@ -35,7 +35,7 @@ public class SignInActivity extends BaseActivity {
 	EditText email = (EditText) findViewById(R.id.sign_in_email_address);
 	email.setText(getOwnerEmailAddress());
 	email.requestFocus();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+	showKeyboard();
 
         hookupHandlers();
     }
@@ -83,8 +83,7 @@ public class SignInActivity extends BaseActivity {
 
             validate(email, password);
 	    setLoading(true);
-	    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-	    imm.hideSoftInputFromWindow(findViewById(R.id.sign_in_password).getWindowToken(), 0);
+	    hideKeyboard();
 	    
 	    new SignInTask().execute(email, password);
         } catch (Exception ex) {

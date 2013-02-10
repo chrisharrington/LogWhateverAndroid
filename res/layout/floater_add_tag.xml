@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@drawable/tile_background"
+	android:padding="10dp"
+	android:layout_alignParentTop="true">
+	<EditText 
+	    android:id="@+id/add_tag_name"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" 
+	    android:hint="@string/add_tag_name_hint"
+	    android:layout_alignParentTop="true"
+	    android:background="@drawable/input_background"
+	    android:padding="10dp"
+	    android:singleLine="true"
+	    android:lines="1"
+	    android:scrollHorizontally="true"/>
+	<LinearLayout
+	    android:id="@+id/add_tag_buttons_container"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:layout_marginTop="10dp"
+	    android:layout_below="@id/add_tag_name">
+	    <Button
+		android:id="@+id/add_tag_add"
+		android:text="@string/add_tag_add"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:layout_marginRight="5dp"
+		android:background="@drawable/button_background" />
+	    <Button android:id="@+id/add_tag_cancel"
+		android:text="@string/add_tag_cancel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="5dp"
+		android:layout_weight="1"
+		android:background="@drawable/button_background" />
+	</LinearLayout>
+	<TextView  
+	    android:id="@+id/add_tag_error"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="10dp"
+	    android:layout_below="@id/add_tag_buttons_container"
+	    android:visibility="gone"
+	    android:textColor="#FF0000" />
+</RelativeLayout>

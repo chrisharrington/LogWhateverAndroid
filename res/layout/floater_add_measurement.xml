@@ -42,6 +42,7 @@
 	    android:layout_marginTop="10dp"
 	    android:layout_below="@id/add_measurement_quantity" />
 	<LinearLayout
+	    android:id="@+id/add_measurement_buttons_container"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
@@ -63,4 +64,12 @@
 		android:layout_weight="1"
 		android:background="@drawable/button_background" />
 	</LinearLayout>
+	<TextView  
+	    android:id="@+id/add_measurement_error"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="10dp"
+	    android:layout_below="@id/add_measurement_buttons_container"
+	    android:visibility="gone"
+	    android:textColor="#FF0000" />
 </RelativeLayout>

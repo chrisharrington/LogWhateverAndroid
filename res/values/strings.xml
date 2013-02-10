@@ -17,6 +17,10 @@
 	<string name="add_measurement_units_hint">Units?</string>
 	<string name="add_measurement_add">Add</string>
 	<string name="add_measurement_cancel">Cancel</string>
+	
+	<string name="add_tag_name_hint">Name?</string>
+	<string name="add_tag_add">Add</string>
+	<string name="add_tag_cancel">Cancel</string>
 
 	<string name="menu_log">Log Some Stuff</string>
 	<string name="menu_search">Search</string>
