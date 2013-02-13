@@ -11,6 +11,7 @@
 	<string name="log_name_hint">Name?</string>
 	<string name="log_add_measurement">Add Measurement</string>
 	<string name="log_add_tag">Add Tag</string>
+	<string name="log_save_button">Save</string>
 
 	<string name="add_measurement_name_hint">Name?</string>
 	<string name="add_measurement_quantity_hint">Quantity?</string>
@@ -24,4 +25,7 @@
 
 	<string name="menu_log">Log Some Stuff</string>
 	<string name="menu_search">Search</string>
+	<string name="menu_log_save">Save</string>
+	<string name="menu_log_add_measurement">Add Measurement</string>
+	<string name="menu_log_add_tag">Add Tag</string>
 </resources>

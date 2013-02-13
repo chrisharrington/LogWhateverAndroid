@@ -33,25 +33,19 @@
                 android:textSize="26sp" />
             <EditText
                 android:id="@+id/sign_in_email_address"
+		style="@style/input"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:hint="@string/email_address_hint"
                 android:layout_marginTop="10dp"
-                android:padding="10dp"
-                android:textColor="@color/input_field"
-                android:background="@drawable/input_background"
                 android:inputType="textEmailAddress"
 		android:selectAllOnFocus="true" />
             <EditText
                 android:id="@+id/sign_in_password"
+		style="@style/input"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:hint="@string/password_hint"
                 android:layout_marginTop="10dp"
-                android:padding="10dp"
-                android:background="@drawable/input_background"
                 android:inputType="textPassword"
-		android:text="boogity"
                 android:imeOptions="actionGo"
 		android:selectAllOnFocus="true" />
             <Button

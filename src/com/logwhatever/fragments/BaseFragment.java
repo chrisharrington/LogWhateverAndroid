@@ -1,6 +1,8 @@
 package com.logwhatever.fragments;
 
 import android.app.Fragment;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -10,8 +12,10 @@ import com.google.inject.Injector;
 import com.logwhatever.R;
 import com.logwhatever.activities.BaseActivity;
 import com.logwhatever.activities.FragmentActivity;
+import com.logwhatever.models.Session;
 import com.logwhatever.service.LogWhateverApplication;
 import java.text.SimpleDateFormat;
+import java.util.UUID;
 
 public class BaseFragment extends Fragment {
 
@@ -19,6 +23,14 @@ public class BaseFragment extends Fragment {
     
     protected BaseFragment() {
 	_format = new SimpleDateFormat("yyyy-MM-dd");
+	
+	setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	menu.clear();
+	inflater.inflate(R.menu.menu, menu);
     }
     
     protected LogWhateverApplication getLogApplication() {
@@ -75,5 +87,23 @@ public class BaseFragment extends Fragment {
     
     protected void showKeyboard(View view) {
 	((BaseActivity) getActivity()).showKeyboard(view);
+    }
+    
+    protected void showError(String error) {
+	((BaseActivity) getActivity()).showError(error);
+    }
+    
+    protected void hideError() {
+	((BaseActivity) getActivity()).hideError();
+    }
+    
+    protected Session getSession() {
+	Session session = new Session();
+	session.EmailAddress = "chrisharrington99@gmail.com";
+	session.Id = UUID.fromString("1E9F9CBE-F05D-4ABC-8BB6-55FF05186F2F");
+	session.Name = "Chris Harrington";
+	session.UserId = UUID.fromString("69A8301C-02CB-4E3B-AEC2-18B83C781485");
+	return session;
+	//return ((LogWhateverApplication) getActivity().getApplication()).getSession();
     }
 }

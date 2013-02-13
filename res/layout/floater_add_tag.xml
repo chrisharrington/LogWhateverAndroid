@@ -7,15 +7,10 @@
 	android:layout_alignParentTop="true">
 	<EditText 
 	    android:id="@+id/add_tag_name"
+	    style="@style/input"
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content" 
 	    android:hint="@string/add_tag_name_hint"
-	    android:layout_alignParentTop="true"
-	    android:background="@drawable/input_background"
-	    android:padding="10dp"
-	    android:singleLine="true"
-	    android:lines="1"
-	    android:scrollHorizontally="true"/>
+	    android:layout_alignParentTop="true" />
 	<LinearLayout
 	    android:id="@+id/add_tag_buttons_container"
 	    android:layout_width="match_parent"

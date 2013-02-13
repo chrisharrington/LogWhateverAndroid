@@ -14,6 +14,10 @@ public class TagRepository extends BaseRepository<Tag> implements ITagRepository
 	    public void execute(List<Tag> parameter) {
 		callback.execute(parameter);
 	    }
+
+	    public void error(Throwable error) {
+		callback.error(error);
+	    }
 	});
     }
 

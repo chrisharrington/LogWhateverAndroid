@@ -2,26 +2,32 @@ package com.logwhatever.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import com.logwhatever.R;
+import com.logwhatever.models.Log;
 import com.logwhatever.models.Measurement;
 import com.logwhatever.models.Tag;
+import com.logwhatever.repositories.ILogRepository;
+import com.logwhatever.service.IExecutor;
 import java.util.Date;
 
 public class LogFragment extends BaseFragment {
 
+    private ILogRepository getLogRepository() { return getInjector().getInstance(ILogRepository.class); }   
+    
     private View _view;
     private LayoutInflater _inflater;
     private ViewGroup _container;
-    private BaseFragment _addMeasurementFragment;
+    private ViewHolder _holder;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,32 +37,48 @@ public class LogFragment extends BaseFragment {
 	if (_view == null)
 	    _view = createView(inflater, container);
 	
-	hookupEvents((ViewHolder) _view.getTag());
+	setHasOptionsMenu(true);
+	hookupEvents();
 	
 	return _view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	menu.clear();
+	inflater.inflate(R.menu.menu_log, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+	switch (item.getItemId()) {
+	    case R.id.menu_save_log:
+		save();
+		break;
+	    case R.id.menu_log_add_measurement:
+		showAddMeasurement();
+		break;
+	    case R.id.menu_log_add_tag:
+		showAddTag();
+		break;
+	    default:
+		return false;
+	}
+	
+	return true;
+    }
+    
+    private void hookupEvents() {
+	
     }
     
     private View createView(LayoutInflater inflater, ViewGroup container) {
 	View view = inflater.inflate(R.layout.fragment_log, container, false);
-	ViewHolder holder = new ViewHolder(view);
-	holder.Date.setText(_format.format(new Date()));
-	holder.Time.setText("12:00 PM");
-	view.setTag(holder);
+	_holder = new ViewHolder(view);
+	_holder.Date.setText(_format.format(new Date()));
+	_holder.Time.setText("12:00 PM");
+	view.setTag(_holder);
 	return view;
-    }
-    
-    private void hookupEvents(ViewHolder holder) {
-	holder.AddMeasurement.setOnClickListener(new OnClickListener() {
-	    public void onClick(View arg0) {
-		showAddMeasurement();
-	    }
-	});
-	
-	holder.AddTag.setOnClickListener(new OnClickListener() {
-	    public void onClick(View arg0) {
-		showAddTag();
-	    }
-	});
     }
     
     private void showAddTag() {
@@ -162,20 +184,63 @@ public class LogFragment extends BaseFragment {
 	}
     }
     
+    private void save() {
+	try {
+	    String name = _holder.Name.getText().toString();
+	    if (name.equals(""))
+		throw new Exception("The name is required.");
+	    
+	    setLoading(true);
+	    
+	    getLog(name, new IExecutor<Log>() {
+		public void execute(Log log) {
+		    if (log != null)
+			loadLog(log);
+		}
+
+		public void error(Throwable error) {
+		    showError("An error has occurred while retrieving your log by name.");
+		    setLoading(false);
+		}
+	    });
+	} catch (Exception ex) {
+	    showError(ex.getMessage());
+	    setLoading(false);
+	}
+    }
+    
+    private void getLog(String name, final IExecutor<Log> callback) throws Exception {
+	getLogRepository().name(name, getSession(), new IExecutor<Log>() {
+	    public void execute(Log log) {
+		if (log != null)
+		    callback.execute(log);
+		//	log = new Log();
+		//	log.Id = UUID.randomUUID();
+		//	log.Name = name;
+		//	log.UserId = getSession().UserId;
+		//	getLogRepository().create(log);
+		//	return log;
+	    }
+
+	    public void error(Throwable error) {
+		showError("An error has occurred while retrieving your log by name.");
+		setLoading(false);
+	    }
+	});
+    }
+    
+    private void loadLog(Log log) {
+	
+    }
+    
     private class ViewHolder {
 	public EditText Name;
 	public EditText Date;
 	public EditText Time;
-	public Button AddMeasurement;
-	public Button AddTag;
 	
 	public ViewHolder(View view) {
 	    Name = (EditText) view.findViewById(R.id.log_name);
 	    Date = (EditText) view.findViewById(R.id.log_date);
-	    Time = (EditText) view.findViewById(R.id.log_time);
-	    AddMeasurement = (Button) view.findViewById(R.id.log_add_measurement);
-	    AddTag  = (Button) view.findViewById(R.id.log_add_tag);
-	}
+	    Time = (EditText) view.findViewById(R.id.log_time);	}
     }
-    
 }

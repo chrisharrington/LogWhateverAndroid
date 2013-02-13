@@ -60,6 +60,10 @@ public class DashboardFragment extends BaseFragment {
 		_logs = logs;
 		onDataRetrieved();
 	    }
+
+	    public void error(Throwable error) {
+		showError("An error has occurred while retrieving your logs.");
+	    }
 	});
     }
     
@@ -68,6 +72,10 @@ public class DashboardFragment extends BaseFragment {
 	    public void execute(List<Measurement> measurements) {
 		_measurements = measurements;
 		onDataRetrieved();
+	    }
+
+	    public void error(Throwable error) {
+		showError("An error has occurred while retrieving your measurements.");
 	    }
 	});
     }
@@ -78,6 +86,10 @@ public class DashboardFragment extends BaseFragment {
 		_events = events;
 		onDataRetrieved();
 	    }
+
+	    public void error(Throwable error) {
+		showError("An error has occurred while retrieving your events.");
+	    }
 	});
     }
     
@@ -86,6 +98,10 @@ public class DashboardFragment extends BaseFragment {
 	    public void execute(List<Tag> tags) {
 		_tags = tags;
 		onDataRetrieved();
+	    }
+
+	    public void error(Throwable error) {
+		showError("An error has occurred while retrieving your tags.");
 	    }
 	});
     }

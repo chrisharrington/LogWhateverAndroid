@@ -24,7 +24,7 @@ public class AddMeasurementFragment extends BaseFragment {
 	_holder = (ViewHolder) _view.getTag();
 	hookupEvents(_holder);
 	_holder.Name.requestFocus();
-	showKeyboard();
+	showKeyboard(_holder.Name);
 	
 	return _view;
     }

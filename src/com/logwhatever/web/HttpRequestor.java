@@ -1,10 +1,12 @@
 package com.logwhatever.web;
 
+import android.os.AsyncTask;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.inject.Inject;
+import com.logwhatever.service.IExecutor;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,55 +29,47 @@ public class HttpRequestor implements IHttpRequestor {
 	_parser = parser;
     }
     
-    public <TModel> TModel get(String url, Class<TModel> resultType, SimpleEntry... parameters) {
-	try {
-	    URL location  = new URL(url + createUrlParameters(parameters));
-	    URLConnection connection = location.openConnection();
-	    
-	    String line;
-	    StringBuilder builder = new StringBuilder();
-	    InputStream stream = connection.getInputStream();
-	    BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-	    while((line = reader.readLine()) != null) {
-		builder.append(line);
-	    }
-	    
-	    return _gson.fromJson(builder.toString(), resultType);
-	} catch (Exception ex) {
-	    return null;
-	}
-    }
-    
-    public <TModel> List<TModel> getList(String url, Class<TModel> resultType, SimpleEntry... parameters) {
-	try {
-	    URL location  = new URL(url + createUrlParameters(parameters));
-	    URLConnection connection = location.openConnection();
-	    
-	    String line;
-	    StringBuilder builder = new StringBuilder();
-	    InputStream stream = connection.getInputStream();
-	    BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-	    while((line = reader.readLine()) != null) {
-		builder.append(line);
-	    }
-	    
-	    JsonElement elements = new JsonParser().parse(builder.toString());
-	    JsonArray array = elements.getAsJsonArray();
-	    Iterator iterator = (Iterator) array.iterator();
-	    List<TModel> list = new ArrayList<TModel>();
+    public <TModel> TModel get(String url, Class<TModel> resultType, SimpleEntry... parameters) throws Exception {
+	URL location  = new URL(url + createUrlParameters(parameters));
+	URLConnection connection = location.openConnection();
 
-	    while(iterator.hasNext()){
-		JsonElement element = (JsonElement) iterator.next();
-		list.add(_gson.fromJson(element, resultType));
-	    }
-	    
-	    return list;
-	} catch (Exception ex) {
-	    return null;
+	String line;
+	StringBuilder builder = new StringBuilder();
+	InputStream stream = connection.getInputStream();
+	BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+	while((line = reader.readLine()) != null) {
+	    builder.append(line);
 	}
+
+	return _gson.fromJson(builder.toString(), resultType);
     }
     
-    public void post(String url, SimpleEntry[] parameters) {
+    public <TModel> List<TModel> getList(String url, Class<TModel> resultType, SimpleEntry... parameters) throws Exception {
+	URL location  = new URL(url + createUrlParameters(parameters));
+	URLConnection connection = location.openConnection();
+
+	String line;
+	StringBuilder builder = new StringBuilder();
+	InputStream stream = connection.getInputStream();
+	BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+	while((line = reader.readLine()) != null) {
+	    builder.append(line);
+	}
+
+	JsonElement elements = new JsonParser().parse(builder.toString());
+	JsonArray array = elements.getAsJsonArray();
+	Iterator iterator = (Iterator) array.iterator();
+	List<TModel> list = new ArrayList<TModel>();
+
+	while(iterator.hasNext()){
+	    JsonElement element = (JsonElement) iterator.next();
+	    list.add(_gson.fromJson(element, resultType));
+	}
+
+	return list;
+    }
+    
+    public void post(String url, IExecutor<Void> callback, SimpleEntry... parameters) {
 	throw new UnsupportedOperationException("Not supported yet.");
     }
     

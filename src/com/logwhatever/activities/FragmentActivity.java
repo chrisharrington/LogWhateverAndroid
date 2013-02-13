@@ -24,7 +24,7 @@ public class FragmentActivity extends BaseActivity {
 		break;
 	    case R.id.menu_search:
 	    default:
-		return super.onOptionsItemSelected(item);
+		return false;
 	}
 	
 	transaction.commit();

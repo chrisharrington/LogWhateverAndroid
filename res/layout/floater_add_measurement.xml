@@ -7,38 +7,23 @@
 	android:layout_alignParentTop="true">
 	<EditText 
 	    android:id="@+id/add_measurement_name"
+	    style="@style/input"
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content" 
 	    android:hint="@string/add_measurement_name_hint"
-	    android:layout_alignParentTop="true"
-	    android:background="@drawable/input_background"
-	    android:padding="10dp"
-	    android:singleLine="true"
-	    android:lines="1"
-	    android:scrollHorizontally="true"/>
+	    android:layout_alignParentTop="true" />
 	<EditText
 	    android:id="@+id/add_measurement_quantity"
+	    style="@style/input"
 	    android:hint="@string/add_measurement_quantity_hint"
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:singleLine="true"
-	    android:lines="1"
-	    android:background="@drawable/input_background"
-	    android:padding="10dp"
-	    android:scrollHorizontally="true"
 	    android:layout_marginTop="10dp"
 	    android:inputType="numberDecimal"
 	    android:layout_below="@id/add_measurement_name" />
 	<EditText
 	    android:id="@+id/add_measurement_units"
+	    style="@style/input"
 	    android:hint="@string/add_measurement_units_hint"
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:singleLine="true"
-	    android:background="@drawable/input_background"
-	    android:padding="10dp"
-	    android:lines="1"
-	    android:scrollHorizontally="true"
 	    android:layout_marginTop="10dp"
 	    android:layout_below="@id/add_measurement_quantity" />
 	<LinearLayout

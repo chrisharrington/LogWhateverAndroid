@@ -16,25 +16,9 @@ import com.logwhatever.R;
 import com.logwhatever.service.LogWhateverApplication;
 
 public class BaseActivity extends Activity {
-    
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-	MenuInflater inflater = getMenuInflater();
-	inflater.inflate(R.menu.menu, menu);
-	return true;
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+
+    public BaseActivity() {
 	
-	switch (item.getItemId()) {
-	    case R.id.menu_log:
-		return true;
-	    case R.id.menu_search:
-		return true;
-	    default:
-		return super.onOptionsItemSelected(item);
-	}
     }
     
     public void hideKeyboard(View view) {
@@ -47,13 +31,13 @@ public class BaseActivity extends Activity {
 	mgr.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
     }
     
-    protected void showError(String error) {
+    public void showError(String error) {
 	TextView panel = (TextView) findViewById(R.id.error);
 	panel.setText(error);
 	panel.setVisibility(View.VISIBLE);
     }
     
-    protected void hideError() {
+    public void hideError() {
 	((TextView) findViewById(R.id.error)).setVisibility(View.GONE);
     }
 	

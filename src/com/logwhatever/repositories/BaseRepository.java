@@ -27,6 +27,7 @@ public abstract class BaseRepository<TModel> implements IRepository<TModel> {
 	private Class<TModel> _type;
 	private Session _session;
 	private IExecutor<List<TModel>> _callback;
+	private Throwable _exception;
 	
 	public GetAll(String collection, Class<TModel> type, Session session, IExecutor<List<TModel>> callback) {
 	    _collection = collection;
@@ -37,12 +38,20 @@ public abstract class BaseRepository<TModel> implements IRepository<TModel> {
 	
 	@Override
 	protected List<TModel> doInBackground(Void... parameters) {
-	    return HttpRequestor.getList(Configuration.getServiceLocation() + _collection, _type, new SimpleEntry("auth", _session.Id), new SimpleEntry("userId", _session.UserId));
+	    try {
+		return HttpRequestor.getList(Configuration.getServiceLocation() + _collection, _type, new SimpleEntry("auth", _session.Id), new SimpleEntry("userId", _session.UserId));
+	    } catch (Exception ex) {
+		_exception = ex;
+		return null;
+	    }
 	}
 	
 	@Override
 	protected void onPostExecute(List<TModel> results) {
-	   _callback.execute(results);
+	    if (_exception == null)
+		_callback.execute(results);
+	    else
+		_callback.error(_exception);
 	}
     }
 }

@@ -2,7 +2,6 @@ package com.logwhatever.activities;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -35,7 +33,7 @@ public class SignInActivity extends BaseActivity {
 	EditText email = (EditText) findViewById(R.id.sign_in_email_address);
 	email.setText(getOwnerEmailAddress());
 	email.requestFocus();
-	showKeyboard();
+	showKeyboard(email);
 
         hookupHandlers();
     }
@@ -78,12 +76,13 @@ public class SignInActivity extends BaseActivity {
 
     private void signIn() {
 	try {
-            String email = ((EditText) findViewById(R.id.sign_in_email_address)).getText().toString();
+	    EditText emailView = (EditText) findViewById(R.id.sign_in_email_address);
+            String email = emailView.getText().toString();
             String password = ((EditText) findViewById(R.id.sign_in_password)).getText().toString();
 
             validate(email, password);
 	    setLoading(true);
-	    hideKeyboard();
+	    hideKeyboard(emailView);
 	    
 	    new SignInTask().execute(email, password);
         } catch (Exception ex) {
@@ -101,16 +100,27 @@ public class SignInActivity extends BaseActivity {
     
     public class SignInTask extends AsyncTask<String, Void, Session> {
 
+	private Throwable _error;
+	
 	@Override
 	protected Session doInBackground(String... strings) {
-	    AbstractMap.SimpleEntry[] parameters = new AbstractMap.SimpleEntry[2];
-	    parameters[0] = new AbstractMap.SimpleEntry("emailAddress", strings[0]);
-	    parameters[1] = new AbstractMap.SimpleEntry("password", strings[1]);
-	    return getHttpRequestor().get(getConfiguration().getServiceLocation() + "sessions/sign-in", Session.class, parameters);
+	    try {
+		AbstractMap.SimpleEntry[] parameters = new AbstractMap.SimpleEntry[2];
+		parameters[0] = new AbstractMap.SimpleEntry("emailAddress", strings[0]);
+		parameters[1] = new AbstractMap.SimpleEntry("password", strings[1]);
+		return getHttpRequestor().get(getConfiguration().getServiceLocation() + "sessions/sign-in", Session.class, parameters);
+	    } catch (Exception ex) {
+		_error = ex;
+		return null;
+	    }
 	}
 
 	@Override
 	protected void onPostExecute(Session session) {
+	    if (_error != null) {
+		showError("An error has occurred while signing you in.");
+		setLoading(false);
+	    }
 	    if (session == null) {
 		showError("Invalid credentials.");
 		setLoading(false);
