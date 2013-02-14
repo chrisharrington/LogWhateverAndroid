@@ -1,12 +1,15 @@
 package com.logwhatever.fragments;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -69,7 +72,35 @@ public class LogFragment extends BaseFragment {
     }
     
     private void hookupEvents() {
-	
+	_holder.Name.setOnFocusChangeListener(new OnFocusChangeListener() {
+	    public void onFocusChange(View arg0, boolean hasFocus) {
+		if (!hasFocus)
+		    getPotentialLog();
+	    }
+	});
+    }
+    
+    private void getPotentialLog() {
+	try {
+	    String name = _holder.Name.getText().toString();
+	    if (name.equals(""))
+		throw new Exception("The name is required.");
+	    
+	    getLog(name, new IExecutor<Log>() {
+		public void execute(Log log) {
+		    if (log == null)
+			clearLog();
+		    else
+			loadLog(log);
+		}
+
+		public void error(Throwable error) {
+		    showError("An error has occurred while retrieving your log by name.");
+		}
+	    });
+	} catch (Exception ex) {
+	    showError(ex.getMessage());
+	}
     }
     
     private View createView(LayoutInflater inflater, ViewGroup container) {
@@ -185,62 +216,50 @@ public class LogFragment extends BaseFragment {
     }
     
     private void save() {
-	try {
-	    String name = _holder.Name.getText().toString();
-	    if (name.equals(""))
-		throw new Exception("The name is required.");
-	    
-	    setLoading(true);
-	    
-	    getLog(name, new IExecutor<Log>() {
-		public void execute(Log log) {
-		    if (log != null)
-			loadLog(log);
-		}
-
-		public void error(Throwable error) {
-		    showError("An error has occurred while retrieving your log by name.");
-		    setLoading(false);
-		}
-	    });
-	} catch (Exception ex) {
-	    showError(ex.getMessage());
-	    setLoading(false);
-	}
+	
     }
     
     private void getLog(String name, final IExecutor<Log> callback) throws Exception {
 	getLogRepository().name(name, getSession(), new IExecutor<Log>() {
 	    public void execute(Log log) {
-		if (log != null)
-		    callback.execute(log);
-		//	log = new Log();
-		//	log.Id = UUID.randomUUID();
-		//	log.Name = name;
-		//	log.UserId = getSession().UserId;
-		//	getLogRepository().create(log);
-		//	return log;
+		callback.execute(log);
 	    }
 
 	    public void error(Throwable error) {
 		showError("An error has occurred while retrieving your log by name.");
-		setLoading(false);
 	    }
 	});
     }
     
     private void loadLog(Log log) {
+	loadMeasurements(log);
 	
+	_holder.Measurements.setVisibility(View.VISIBLE);
+	_holder.Tags.setVisibility(View.VISIBLE);
+    }
+    
+    private void loadMeasurements(Log log) {
+	
+    }
+    
+    private void clearLog() {
+	_holder.Measurements.setVisibility(View.GONE);
+	_holder.Tags.setVisibility(View.GONE);
     }
     
     private class ViewHolder {
 	public EditText Name;
 	public EditText Date;
 	public EditText Time;
+	public LinearLayout Measurements;
+	public LinearLayout Tags;
 	
 	public ViewHolder(View view) {
 	    Name = (EditText) view.findViewById(R.id.log_name);
 	    Date = (EditText) view.findViewById(R.id.log_date);
-	    Time = (EditText) view.findViewById(R.id.log_time);	}
+	    Time = (EditText) view.findViewById(R.id.log_time);
+	    Measurements = (LinearLayout) view.findViewById(R.id.log_measurements);
+	    Tags  = (LinearLayout) view.findViewById(R.id.log_tags);
+	}
     }
 }

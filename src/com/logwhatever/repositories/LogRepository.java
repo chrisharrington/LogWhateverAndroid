@@ -16,11 +16,13 @@ public class LogRepository extends BaseRepository<Log> implements ILogRepository
 	all(session, new IExecutor<List<Log>>() {
 	    public void execute(List<Log> logs) {
 		for (Log log : logs) {
-		    if (log.Name == name) {
+		    if (log.Name.equals(name)) {
 			callback.execute(log);
-			break;
+			return;
 		    }
 		}
+		
+		callback.execute(null);
 	    }
 
 	    public void error(Throwable error) {

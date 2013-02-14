@@ -14,13 +14,13 @@
         android:label="Log Whatever"
         android:theme="@style/LogWhateverTheme"
 	android:name=".service.LogWhateverApplication">
-        <activity android:name="com.logwhatever.activities.SignInActivity" />
-	<activity android:name="com.logwhatever.activities.FragmentActivity" android:windowSoftInputMode="adjustPan">
+        <activity android:name="com.logwhatever.activities.SignInActivity">
 	    <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
 	    </intent-filter>
 	</activity>
+	<activity android:name="com.logwhatever.activities.FragmentActivity" android:windowSoftInputMode="adjustPan" />
     </application>
     
     <uses-permission android:name="android.permission.INTERNET" />

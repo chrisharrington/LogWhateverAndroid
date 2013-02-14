@@ -38,6 +38,7 @@
                 android:hint="@string/email_address_hint"
                 android:layout_marginTop="10dp"
                 android:inputType="textEmailAddress"
+		android:text="chrisharrington99@gmail.com"
 		android:selectAllOnFocus="true" />
             <EditText
                 android:id="@+id/sign_in_password"
@@ -47,6 +48,7 @@
                 android:layout_marginTop="10dp"
                 android:inputType="textPassword"
                 android:imeOptions="actionGo"
+		android:text="boogity"
 		android:selectAllOnFocus="true" />
             <Button
                 android:id="@+id/sign_in_submit"

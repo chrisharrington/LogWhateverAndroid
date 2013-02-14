@@ -2,6 +2,7 @@ package com.logwhatever.activities;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,15 +14,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.logwhatever.R;
+import com.logwhatever.models.Log;
 import com.logwhatever.models.Session;
+import com.logwhatever.repositories.ILogRepository;
+import com.logwhatever.service.ICachePrimer;
 import com.logwhatever.service.IConfiguration;
+import com.logwhatever.service.IExecutor;
 import com.logwhatever.web.IHttpRequestor;
 import java.util.AbstractMap;
+import java.util.List;
 
 public class SignInActivity extends BaseActivity {
 
     protected IHttpRequestor getHttpRequestor() { return getInjector().getInstance(IHttpRequestor.class); }
     protected IConfiguration getConfiguration() { return getInjector().getInstance(IConfiguration.class); }
+    protected ILogRepository getLogRepository() { return getInjector().getInstance(ILogRepository.class); }
+    protected ICachePrimer getCachePrimer() { return getInjector().getInstance(ICachePrimer.class); }
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +46,14 @@ public class SignInActivity extends BaseActivity {
         hookupHandlers();
     }
 
-    protected void onSignInSuccessful(Session session) {
+    private void onSignInSuccessful(Session session) {
+	final Context context = this;
 	hideError();
 	getLogApplication().setSession(session);
-	
-	startActivity(new Intent(this, FragmentActivity.class));
+	getCachePrimer().prime(session, new IExecutor<Void>() {
+	    public void execute(Void parameter) { startActivity(new Intent(context, FragmentActivity.class)); }
+	    public void error(Throwable error) { showError("An error has occurred while priming the cache."); }
+	});
     }
     
     private String getOwnerEmailAddress() {
