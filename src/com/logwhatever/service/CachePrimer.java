@@ -29,32 +29,35 @@ public class CachePrimer implements ICachePrimer {
 	_callback = callback;
 	
 	primeLogs(session);
+	primeEvents(session);
+	primeMeasurements(session);
+	primeTags(session);
     }
 
     private void primeLogs(Session session) {
 	LogRepository.all(session, new IExecutor<List<Log>>() {
-	    public void execute(List<Log> parameter) { _logsComplete = true; }
+	    public void execute(List<Log> parameter) { _logsComplete = true; onPrimeComplete(); }
 	    public void error(Throwable error) { _logsComplete = true; }
 	});
     }
     
     private void primeEvents(Session session) {
 	EventRepository.all(session, new IExecutor<List<Event>>() {
-	    public void execute(List<Event> parameter) { _eventsComplete = true; }
+	    public void execute(List<Event> parameter) { _eventsComplete = true; onPrimeComplete(); }
 	    public void error(Throwable error) { _eventsComplete = true; }
 	});
     }
     
     private void primeMeasurements(Session session) {
 	MeasurementRepository.all(session, new IExecutor<List<Measurement>>() {
-	    public void execute(List<Measurement> parameter) { _measurementsComplete = true; }
+	    public void execute(List<Measurement> parameter) { _measurementsComplete = true; onPrimeComplete(); }
 	    public void error(Throwable error) { _measurementsComplete = true; }
 	});
     }
     
     private void primeTags(Session session) {
 	TagRepository.all(session, new IExecutor<List<Tag>>() {
-	    public void execute(List<Tag> parameter) { _tagsComplete = true; }
+	    public void execute(List<Tag> parameter) { _tagsComplete = true; onPrimeComplete(); }
 	    public void error(Throwable error) { _tagsComplete = true; }
 	});
     }

@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.logwhatever.R;
-import com.logwhatever.models.Log;
 import com.logwhatever.models.Session;
 import com.logwhatever.repositories.ILogRepository;
 import com.logwhatever.service.ICachePrimer;
@@ -22,7 +21,6 @@ import com.logwhatever.service.IConfiguration;
 import com.logwhatever.service.IExecutor;
 import com.logwhatever.web.IHttpRequestor;
 import java.util.AbstractMap;
-import java.util.List;
 
 public class SignInActivity extends BaseActivity {
 
@@ -40,7 +38,6 @@ public class SignInActivity extends BaseActivity {
 	
 	EditText email = (EditText) findViewById(R.id.sign_in_email_address);
 	email.setText(getOwnerEmailAddress());
-	email.requestFocus();
 	showKeyboard(email);
 
         hookupHandlers();

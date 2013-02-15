@@ -1,11 +1,14 @@
 package com.logwhatever.activities;
 import android.app.Activity;
 import android.content.Context;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -17,18 +20,14 @@ import com.logwhatever.service.LogWhateverApplication;
 
 public class BaseActivity extends Activity {
 
-    public BaseActivity() {
-	
-    }
-    
     public void hideKeyboard(View view) {
 	InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 	mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
     
     public void showKeyboard(View view) {
-	InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-	mgr.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+	view.requestFocus();
+	getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
     
     public void showError(String error) {
