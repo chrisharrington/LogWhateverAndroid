@@ -27,10 +27,10 @@ import java.util.List;
 
 public class DashboardFragment extends BaseFragment {
 
-    private ILogRepository getLogRepository() { return getInjector().getInstance(ILogRepository.class); }
-    private IMeasurementRepository getMeasurementRepository() { return getInjector().getInstance(IMeasurementRepository.class); }
-    private ITagRepository getTagRepository() { return getInjector().getInstance(ITagRepository.class); }
-    private IEventRepository getEventRepository() { return getInjector().getInstance(IEventRepository.class); }
+    protected ILogRepository getLogRepository() { return getInjector().getInstance(ILogRepository.class); }
+    protected IMeasurementRepository getMeasurementRepository() { return getInjector().getInstance(IMeasurementRepository.class); }
+    protected ITagRepository getTagRepository() { return getInjector().getInstance(ITagRepository.class); }
+    protected IEventRepository getEventRepository() { return getInjector().getInstance(IEventRepository.class); }
     
     private View _view;
     private List<Log> _logs;
@@ -56,7 +56,7 @@ public class DashboardFragment extends BaseFragment {
     
     private void getLogs() {
 	getLogRepository().all(getLogApplication().getSession(), new IExecutor<List<Log>>() {
-	    public void execute(List<Log> logs) {
+	    public void success(List<Log> logs) {
 		_logs = logs;
 		onDataRetrieved();
 	    }
@@ -69,7 +69,7 @@ public class DashboardFragment extends BaseFragment {
     
     private void getMeasurements() {
 	getMeasurementRepository().all(getLogApplication().getSession(), new IExecutor<List<Measurement>>() {
-	    public void execute(List<Measurement> measurements) {
+	    public void success(List<Measurement> measurements) {
 		_measurements = measurements;
 		onDataRetrieved();
 	    }
@@ -82,7 +82,7 @@ public class DashboardFragment extends BaseFragment {
     
     private void getEvents() {
 	getEventRepository().all(getLogApplication().getSession(), new IExecutor<List<Event>>() {
-	    public void execute(List<Event> events) {
+	    public void success(List<Event> events) {
 		_events = events;
 		onDataRetrieved();
 	    }
@@ -95,7 +95,7 @@ public class DashboardFragment extends BaseFragment {
     
     private void getTags() {
 	getTagRepository().all(getLogApplication().getSession(), new IExecutor<List<Tag>>() {
-	    public void execute(List<Tag> tags) {
+	    public void success(List<Tag> tags) {
 		_tags = tags;
 		onDataRetrieved();
 	    }

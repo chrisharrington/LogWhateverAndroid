@@ -22,14 +22,14 @@ public abstract class BaseRepository<TModel> implements IRepository<TModel> {
     public synchronized void all(Session session, IExecutor<List<TModel>> callback) {
 	if (_getAll == null)
 	    _getAll = new GetAll(getCollection(), getType());
-	
+
 	if (_getAll.isCompleted() && _getAll.getError() == null)
-	    callback.execute(_getAll.getResults());
+	    callback.success(_getAll.getResults());
 	else if (_getAll.isCompleted() && _getAll.getError() != null)
 	    callback.error(_getAll.getError());
 	else
 	    _getAll.registerCallback(callback);
-	
+
 	if (!_getAll.hasBegunExecuting())
 	    _getAll.execute(session, callback);
     }
@@ -77,7 +77,7 @@ public abstract class BaseRepository<TModel> implements IRepository<TModel> {
 	    _results = results;
 	    for (IExecutor<List<TModel>> callback : _callbacks) {
 		if (_exception == null)
-		    callback.execute(results);
+		    callback.success(results);
 		else
 		    callback.error(_exception);
 	    }

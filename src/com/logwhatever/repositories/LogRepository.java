@@ -14,15 +14,15 @@ public class LogRepository extends BaseRepository<Log> implements ILogRepository
 	    throw new Exception("The name is missing.");
 	
 	all(session, new IExecutor<List<Log>>() {
-	    public void execute(List<Log> logs) {
+	    public void success(List<Log> logs) {
 		for (Log log : logs) {
 		    if (log.Name.equals(name)) {
-			callback.execute(log);
+			callback.success(log);
 			return;
 		    }
 		}
 		
-		callback.execute(null);
+		callback.success(null);
 	    }
 
 	    public void error(Throwable error) {

@@ -1,6 +1,6 @@
 package com.logwhatever.service;
 
 public interface IExecutor<TParameter> {
-    void execute(TParameter parameter);
+    void success(TParameter parameter);
     void error(Throwable error);
 }

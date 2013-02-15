@@ -11,8 +11,8 @@ public class TagRepository extends BaseRepository<Tag> implements ITagRepository
     
     public void latest(Session session, final IExecutor<List<Tag>> callback) {
 	all(session, new IExecutor<List<Tag>>() {
-	    public void execute(List<Tag> parameter) {
-		callback.execute(parameter);
+	    public void success(List<Tag> parameter) {
+		callback.success(parameter);
 	    }
 
 	    public void error(Throwable error) {

@@ -1,7 +1,8 @@
 package com.logwhatever.fragments;
 
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -19,13 +19,11 @@ import com.logwhatever.R;
 import com.logwhatever.models.Log;
 import com.logwhatever.models.Measurement;
 import com.logwhatever.models.Tag;
-import com.logwhatever.repositories.ILogRepository;
 import com.logwhatever.service.IExecutor;
 import java.util.Date;
+import java.util.List;
 
 public class LogFragment extends BaseFragment {
-
-    private ILogRepository getLogRepository() { return getInjector().getInstance(ILogRepository.class); }   
     
     private View _view;
     private LayoutInflater _inflater;
@@ -42,6 +40,7 @@ public class LogFragment extends BaseFragment {
 	
 	setHasOptionsMenu(true);
 	hookupEvents();
+	showKeyboard(_holder.Name);
 	
 	return _view;
     }
@@ -72,11 +71,10 @@ public class LogFragment extends BaseFragment {
     }
     
     private void hookupEvents() {
-	_holder.Name.setOnFocusChangeListener(new OnFocusChangeListener() {
-	    public void onFocusChange(View arg0, boolean hasFocus) {
-		if (!hasFocus)
-		    getPotentialLog();
-	    }
+	_holder.Name.addTextChangedListener(new TextWatcher() {
+	    public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
+	    public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { getPotentialLog(); }
+	    public void afterTextChanged(Editable arg0) {}
 	});
     }
     
@@ -84,10 +82,10 @@ public class LogFragment extends BaseFragment {
 	try {
 	    String name = _holder.Name.getText().toString();
 	    if (name.equals(""))
-		throw new Exception("The name is required.");
+		return;
 	    
 	    getLog(name, new IExecutor<Log>() {
-		public void execute(Log log) {
+		public void success(Log log) {
 		    if (log == null)
 			clearLog();
 		    else
@@ -221,8 +219,8 @@ public class LogFragment extends BaseFragment {
     
     private void getLog(String name, final IExecutor<Log> callback) throws Exception {
 	getLogRepository().name(name, getSession(), new IExecutor<Log>() {
-	    public void execute(Log log) {
-		callback.execute(log);
+	    public void success(Log log) {
+		callback.success(log);
 	    }
 
 	    public void error(Throwable error) {
@@ -233,18 +231,37 @@ public class LogFragment extends BaseFragment {
     
     private void loadLog(Log log) {
 	loadMeasurements(log);
-	
-	_holder.Measurements.setVisibility(View.VISIBLE);
-	_holder.Tags.setVisibility(View.VISIBLE);
-    }
-    
-    private void loadMeasurements(Log log) {
-	
     }
     
     private void clearLog() {
 	_holder.Measurements.setVisibility(View.GONE);
 	_holder.Tags.setVisibility(View.GONE);
+    }
+    
+    private void loadMeasurements(Log log) {
+	getMeasurementRepository().log(getSession(), log, new IExecutor<List<Measurement>>() {
+	    public void success(List<Measurement> measurements) {
+		LinearLayout container = (LinearLayout) _container.findViewById(R.id.log_measurements);
+		for (Measurement measurement : measurements) {
+		    LinearLayout measurementView = (LinearLayout) _inflater.inflate(R.layout.log_add_measurement, _container, false);
+		    if (measurement.Unit != null && !measurement.Unit.equals("")) {
+			TextView unit = (TextView) measurementView.findViewById(R.id.log_add_measurement_units);
+			unit.setText(measurement.Unit);
+			unit.setVisibility(View.VISIBLE);
+		    }
+		    if (measurement.Name != null && !measurement.Name.equals(""))
+			((EditText) measurementView.findViewById(R.id.log_add_measurement_quantity)).setHint(measurement.Name);
+		    container.addView(measurementView);
+		}
+
+		if (!measurements.isEmpty())
+		    _holder.Measurements.setVisibility(View.VISIBLE);
+ 	    }
+
+	    public void error(Throwable error) {
+		showError("An error has occurred while retrieving measurements for the selected log.");
+	    }
+	});
     }
     
     private class ViewHolder {

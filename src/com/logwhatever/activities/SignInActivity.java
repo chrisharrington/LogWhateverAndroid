@@ -48,9 +48,11 @@ public class SignInActivity extends BaseActivity {
 	hideError();
 	getLogApplication().setSession(session);
 	getCachePrimer().prime(session, new IExecutor<Void>() {
-	    public void execute(Void parameter) { startActivity(new Intent(context, FragmentActivity.class)); }
+	    public void success(Void parameter) {}
 	    public void error(Throwable error) { showError("An error has occurred while priming the cache."); }
 	});
+	
+	startActivity(new Intent(context, FragmentActivity.class));
     }
     
     private String getOwnerEmailAddress() {

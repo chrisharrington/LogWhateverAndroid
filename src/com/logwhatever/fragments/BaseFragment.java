@@ -13,6 +13,10 @@ import com.logwhatever.R;
 import com.logwhatever.activities.BaseActivity;
 import com.logwhatever.activities.FragmentActivity;
 import com.logwhatever.models.Session;
+import com.logwhatever.repositories.IEventRepository;
+import com.logwhatever.repositories.ILogRepository;
+import com.logwhatever.repositories.IMeasurementRepository;
+import com.logwhatever.repositories.ITagRepository;
 import com.logwhatever.service.LogWhateverApplication;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
@@ -20,6 +24,11 @@ import java.util.UUID;
 public class BaseFragment extends Fragment {
 
     protected SimpleDateFormat _format;
+    
+    protected ILogRepository getLogRepository() { return getInjector().getInstance(ILogRepository.class); }
+    protected IEventRepository getEventRepository() { return getInjector().getInstance(IEventRepository.class); }
+    protected IMeasurementRepository getMeasurementRepository() { return getInjector().getInstance(IMeasurementRepository.class); }
+    protected ITagRepository getTagRepository() { return getInjector().getInstance(ITagRepository.class); }
     
     protected BaseFragment() {
 	_format = new SimpleDateFormat("yyyy-MM-dd");
