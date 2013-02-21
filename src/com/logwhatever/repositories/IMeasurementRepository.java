@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface IMeasurementRepository extends IRepository<Measurement> {
     void log(Session session, Log log, IExecutor<List<Measurement>> callback);
+    void uniqueForLog(Session session, Log log, IExecutor<List<Measurement>> callback);
 }

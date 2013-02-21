@@ -27,4 +27,28 @@ public class MeasurementRepository extends BaseRepository<Measurement> implement
 	    }
 	});
     }
+
+    public void uniqueForLog(Session session, final Log log, final IExecutor<List<Measurement>> callback) {
+	List<Measurement> result = new ArrayList<Measurement>();
+	log(session, log, new IExecutor<List<Measurement>>() {
+	    public void success(List<Measurement> measurements) {
+		List<Measurement> result = new ArrayList<Measurement>();
+		for (Measurement measurement : measurements)
+		    if (!containsLogMeasurement(measurement, result))
+			result.add(measurement);
+		callback.success(result);
+	    }
+
+	    public void error(Throwable error) {
+		callback.error(error);
+	    }
+	});
+    }
+    
+    private boolean containsLogMeasurement(Measurement measurement, List<Measurement> measurements) {
+	for (Measurement innerMeasurement : measurements)
+	    if (innerMeasurement.LogId.equals(measurement.LogId))
+		return true;
+	return false;
+    }
 }

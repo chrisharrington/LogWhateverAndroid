@@ -9,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -239,7 +238,7 @@ public class LogFragment extends BaseFragment {
     }
     
     private void loadMeasurements(Log log) {
-	getMeasurementRepository().log(getSession(), log, new IExecutor<List<Measurement>>() {
+	getMeasurementRepository().uniqueForLog(getSession(), log, new IExecutor<List<Measurement>>() {
 	    public void success(List<Measurement> measurements) {
 		LinearLayout container = (LinearLayout) _container.findViewById(R.id.log_measurements);
 		for (Measurement measurement : measurements) {
