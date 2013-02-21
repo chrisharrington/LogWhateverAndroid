@@ -1,16 +1,9 @@
 package com.logwhatever.activities;
 import android.app.Activity;
 import android.content.Context;
-import android.os.SystemClock;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,7 +20,7 @@ public class BaseActivity extends Activity {
     
     public void showKeyboard(View view) {
 	view.requestFocus();
-	getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+	getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE | LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
     
     public void showError(String error) {

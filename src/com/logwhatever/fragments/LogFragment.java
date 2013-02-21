@@ -127,13 +127,17 @@ public class LogFragment extends BaseFragment {
 	    public void onClick(View arg0) {
 		Tag tag = readTagFromFloater();
 		
+		LinearLayout tagContainer = (LinearLayout) _view.findViewById(R.id.log_tags);
+		
 		View tagView = _inflater.inflate(R.layout.event_data, _container, false);
 		((TextView) tagView.findViewById(R.id.event_data_title)).setText(tag.toString());
 		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		params.bottomMargin = 10;
+		if (tagContainer.getChildCount() > 0)
+		    params.bottomMargin = 10;
 		tagView.setLayoutParams(params);
-		View container = _view.findViewById(R.id.log_tags);
-		((LinearLayout) _view.findViewById(R.id.log_tags)).addView(tagView, 0);
+		
+		tagContainer.addView(tagView, 0);
+		tagContainer.setVisibility(View.VISIBLE);
 		
 		hideFloater();
 		hideKeyboard(view);
@@ -178,13 +182,23 @@ public class LogFragment extends BaseFragment {
 		if (measurement == null)
 		    return;
 		
-		View measurementView = _inflater.inflate(R.layout.event_data, _container, false);
-		((TextView) measurementView.findViewById(R.id.event_data_title)).setText(measurement.toString());
+		LinearLayout measurementContainer = (LinearLayout) _view.findViewById(R.id.log_measurements);
+		
+		View measurementView = _inflater.inflate(R.layout.log_add_measurement, _container, false);
+		((TextView) measurementView.findViewById(R.id.log_add_measurement_units)).setText(measurement.Unit);
+		TextView quantity = (TextView) measurementView.findViewById(R.id.log_add_measurement_quantity);
+		quantity.setText(Float.toString(measurement.Quantity));
+		if (!measurement.Name.equals(""))
+		    quantity.setHint(measurement.Name);
+		
 		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		params.bottomMargin = 10;
+		if (measurementContainer.getChildCount() > 0)
+		    params.bottomMargin = 10;
 		measurementView.setLayoutParams(params);
-		View container = _view.findViewById(R.id.log_measurements);
-		((LinearLayout) _view.findViewById(R.id.log_measurements)).addView(measurementView, 0);
+		
+		
+		measurementContainer.addView(measurementView, 0);
+		measurementContainer.setVisibility(View.VISIBLE);
 		
 		hideFloater();
 		hideKeyboard(view);

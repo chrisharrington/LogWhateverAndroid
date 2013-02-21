@@ -12,6 +12,7 @@
 	android:layout_height="wrap_content"
 	android:textColor="#000000"
 	android:textCursorDrawable="@null"
+	android:inputType="numberDecimal"
 	android:layout_weight="1" />
     <TextView
 	android:id="@+id/log_add_measurement_units"
