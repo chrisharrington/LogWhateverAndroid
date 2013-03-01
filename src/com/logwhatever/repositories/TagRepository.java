@@ -21,4 +21,8 @@ public class TagRepository extends BaseRepository<Tag> implements ITagRepository
 	});
     }
 
+    public void create(Session session, Tag tag) {
+	throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

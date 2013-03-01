@@ -17,6 +17,14 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 public class HttpRequestor implements IHttpRequestor {
 
@@ -69,8 +77,8 @@ public class HttpRequestor implements IHttpRequestor {
 	return list;
     }
     
-    public void post(String url, IExecutor<Void> callback, SimpleEntry... parameters) {
-	throw new UnsupportedOperationException("Not supported yet.");
+    public void post(String url, IExecutor<Void> callback, SimpleEntry... parameters) throws Exception {
+	new Post(url, callback).execute(parameters);
     }
     
     private String createUrlParameters(SimpleEntry[] parameters) {
@@ -80,5 +88,42 @@ public class HttpRequestor implements IHttpRequestor {
 	for (int i = 0; i < parameters.length; i++)
 	    result += "&" + parameters[i].getKey() + "=" + URLEncoder.encode(parameters[i].getValue().toString());
 	return "?" + result.substring(1);
+    }
+    
+    private class Post extends AsyncTask<SimpleEntry, Void, Integer> {
+
+	private String _url;
+	private IExecutor<Void> _callback;
+	
+	public Post(String url, IExecutor<Void> callback) {
+	    _url = url;
+	    _callback = callback;
+	}
+	
+	@Override
+	protected Integer doInBackground(SimpleEntry... parameters) {
+	    try {
+		HttpClient client = new DefaultHttpClient();
+		HttpPost post = new HttpPost(_url);
+
+		List<NameValuePair> args = new ArrayList<NameValuePair>();
+		for (SimpleEntry parameter : parameters)
+		    args.add(new BasicNameValuePair(parameter.getKey().toString(), parameter.getValue().toString()));
+		post.setEntity(new UrlEncodedFormEntity(args));
+
+		return client.execute(post).getStatusLine().getStatusCode();
+	    } catch (Exception ex) {
+		return 0;
+	    }
+	}
+	
+	@Override
+	protected void onPostExecute(Integer code) {
+	    if (code == 200)
+		_callback.success(null);
+	    else
+		_callback.error(null);
+	}
+	
     }
 }

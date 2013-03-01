@@ -51,4 +51,8 @@ public class MeasurementRepository extends BaseRepository<Measurement> implement
 		return true;
 	return false;
     }
+
+    public void create(Session session, Measurement measurement) {
+	throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

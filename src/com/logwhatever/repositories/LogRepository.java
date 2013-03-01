@@ -9,9 +9,11 @@ public class LogRepository extends BaseRepository<Log> implements ILogRepository
     public String getCollection() { return "logs"; }
     public Class<Log> getType() { return Log.class; }
 
-    public void name(final String name, Session session, final IExecutor<Log> callback) throws Exception {
-	if (name == null || name.equals(""))
-	    throw new Exception("The name is missing.");
+    public void name(final String name, Session session, final IExecutor<Log> callback) {
+	if (name == null || name.equals("")) {
+	    callback.error(new Exception("The name is missing."));
+	    return;
+	}
 	
 	all(session, new IExecutor<List<Log>>() {
 	    public void success(List<Log> logs) {
@@ -31,10 +33,7 @@ public class LogRepository extends BaseRepository<Log> implements ILogRepository
 	});
     }
 
-    public void create(Log log) throws Exception {
-	if (log == null)
-	    throw new Exception("The log is missing.");
-	
+    public void create(Session session, Log log) {
 	//HttpRequestor.post(Configuration.getServiceLocation() + "logs", new SimpleEntry("log", log));
     }
 }

@@ -15,12 +15,18 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import com.logwhatever.R;
+import com.logwhatever.models.Event;
 import com.logwhatever.models.Log;
+import com.logwhatever.models.LogData;
 import com.logwhatever.models.Measurement;
+import com.logwhatever.models.MeasurementData;
 import com.logwhatever.models.Tag;
+import com.logwhatever.models.User;
 import com.logwhatever.service.IExecutor;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class LogFragment extends BaseFragment {
     
@@ -226,8 +232,9 @@ public class LogFragment extends BaseFragment {
 	}
     }
     
-    private void save() {
-	
+    private void validate() throws Exception {
+	if (_holder.Name.getText().toString().equals(""))
+	    throw new Exception("The name is required.");
     }
     
     private void getLog(String name, final IExecutor<Log> callback) throws Exception {
@@ -275,6 +282,125 @@ public class LogFragment extends BaseFragment {
 		showError("An error has occurred while retrieving measurements for the selected log.");
 	    }
 	});
+    }
+    
+    private void save() {
+	try {
+	    validate();
+	    hideError();
+	    
+	    final LogData data = new LogData();
+	    data.Name = _holder.Name.getText().toString();
+	    String dateText = _holder.Date.getText().toString();
+	    data.Date = parseDate(_holder.Date.getText().toString());
+	    data.Time = parseTime(_holder.Time.getText().toString());
+	    data.User = new User();
+	    data.User.Id = getSession().UserId;
+	    getLog(data, new IExecutor<Log>() {
+		public void success(Log log) {
+		    Event event = createEvent(data, log);
+		    saveMeasurements(data.User, log, event, data.Measurements);
+		    saveTags(log, data.User, event, data.Tags);
+		}
+
+		public void error(Throwable error) {
+		    showError("An error has occurred while retrieving the log details.");
+		}
+	    });
+	} catch (Exception ex) {
+	    showError("An error has occured while saving the log.");
+	}
+    }
+    
+    private Date parseDate(String dateString) {
+	try {
+	    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	    return format.parse(dateString);
+	} catch (Exception ex) {
+	    showError("The date is invalid.");
+	    return null;
+	}
+    }
+    
+    private Date parseTime(String timeString) {
+	try {
+	    SimpleDateFormat format = new SimpleDateFormat("h:m a");;
+	    return format.parse(timeString);
+	} catch (Exception ex) {
+	    showError("The date is invalid.");
+	    return null;
+	}
+    }
+	
+    private void saveTags(Log log, User user, Event event, List<Tag> tags)
+    {
+	for (Tag tag : tags) {
+	    Tag created = new Tag();
+	    created.Id = UUID.randomUUID();
+	    created.LogId = log.Id;
+	    created.LogName = log.Name;
+	    created.EventId = event.Id;
+	    created.Date = event.Date;
+	    created.Name = tag.Name;
+	    created.UserId = user.Id;
+	    getTagRepository().create(getSession(), created);
+	}
+    }
+
+    private void saveMeasurements(User user, Log log, Event event, List<MeasurementData> measurements)
+    {
+	for (MeasurementData measurement : measurements) {
+	    Measurement created = new Measurement();
+	    created.Id = UUID.randomUUID();
+	    created.GroupId = measurement.GroupId == null ? UUID.randomUUID() : measurement.GroupId;
+	    created.EventId = event.Id;
+	    created.Date = event.Date;
+	    created.Name = measurement.Name;
+	    created.Quantity = measurement.Quantity;
+	    created.Unit = measurement.Unit;
+	    created.LogId = log.Id;
+	    created.LogName = log.Name;
+	    created.UserId = user.Id;
+	    getMeasurementRepository().create(getSession(), created);
+	}
+    }
+
+    private Event createEvent(LogData data, Log log)
+    {
+	Event event = new Event();
+	event.Date = mergeDateAndTime(data.Date, data.Time);
+	event.Id = UUID.randomUUID();
+	event.LogId = log.Id;
+	event.LogName = log.Name;
+	event.UserId = data.User.Id;
+	getEventRepository().create(getSession(), event, null);
+	return event;
+    }
+
+    private void getLog(final LogData data, final IExecutor<Log> callback)
+    {
+	getLogRepository().name(data.Name, getSession(), new IExecutor<Log>() {
+	    public void success(Log log) {
+		if (log == null)
+		{
+		    log = new Log();
+		    log.Id = UUID.randomUUID();
+		    log.Name = data.Name;
+		    log.UserId = data.User.Id;
+		    getLogRepository().create(getSession(), log);
+		}
+		callback.success(log);
+	    }
+
+	    public void error(Throwable error) {
+		showError("An error has occurred while retrieving the log information.");
+	    }
+	});
+    }
+
+    private Date mergeDateAndTime(Date date, Date time)
+    {
+	return new Date(date.getYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes(), time.getSeconds());
     }
     
     private class ViewHolder {
